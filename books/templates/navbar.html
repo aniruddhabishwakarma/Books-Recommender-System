@@ -1,0 +1,41 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="{% url 'home' %}">📚 Book Recommender</a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav me-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'home' %}">Home</a>
+                </li>
+            </ul>
+
+            <!-- Search Bar -->
+            <form class="d-flex me-3" action="{% url 'search_books' %}" method="GET">
+                <input class="form-control me-2" type="search" name="query" placeholder="Search books..." aria-label="Search">
+                <button class="btn btn-outline-light" type="submit">Search</button>
+            </form>
+
+            {% if user.is_authenticated %}
+            <!-- Dropdown for Logged-in Users -->
+            <div class="dropdown">
+                <a class="nav-link dropdown-toggle text-white" href="#" role="button" data-bs-toggle="dropdown">
+                    <img src="{{ user.userprofile.profile_picture.url }}" class="rounded-circle" width="30" height="30" alt="Profile">
+                    {{ user.userprofile.full_name }}
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    <li><a class="dropdown-item" href="{% url 'my_account' %}">My Account</a></li>
+                    <li><a class="dropdown-item text-danger" href="{% url 'logout' %}">Logout</a></li>
+                </ul>
+            </div>
+            {% else %}
+            <!-- Login & Register Buttons for Guests -->
+            <a href="{% url 'login' %}" class="btn btn-success me-2">Login</a>
+            <a href="{% url 'register' %}" class="btn btn-primary">Register</a>
+            {% endif %}
+        </div>
+    </div>
+</nav>

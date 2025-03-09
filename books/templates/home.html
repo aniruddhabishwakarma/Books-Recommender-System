@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Book Recommender{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">📚 Featured</h1>
+    <div class="row">
+        {% for book in books %}
+        <div class="col-md-3 mb-4">
+            <div class="card shadow-sm h-100">
+                <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">
+                    <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ book.title }}</h5>
+                        <p class="card-text text-muted">{{ book.authors }}</p>
+                    </div>
+                </a>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-center">No books available.</p>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

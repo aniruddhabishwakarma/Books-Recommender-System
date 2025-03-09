@@ -1,0 +1,19 @@
+# IDEs/Editors
+.idea/
+.vscode/
+*.swp
+
+# Logs
+*.log
+
+# Python
+*.pyc
+*.pyo
+__pycache__/
+*.pyd
+*.pdb
+
+# Virtual environment
+venv/
+env/
+*.env
