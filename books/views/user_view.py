@@ -95,7 +95,7 @@ def edit_profile(request):
 
         profile.save()
         messages.success(request, "Profile updated successfully!")
-        return redirect("my_account.html")  # Redirect back to profile page
+        return redirect("edit_profile")  # Redirect back to profile page
 
     return render(request, "edit_profile.html", {"profile": profile})
 
@@ -111,7 +111,7 @@ def change_password(request):
 
         # ✅ Validate current password
         if not check_password(current_password, user.password):
-            messages.error(request, "Current password is incorrect.")
+            messages.error(request, "Mero Lado.")
             return redirect("change_password")
 
         # ✅ Validate new password length
@@ -150,7 +150,6 @@ def add_favorite(request, book_id):
     """Adds a book to favorites."""
     book = get_object_or_404(Book, id=book_id)
     FavoriteBook.objects.get_or_create(user=request.user, book=book)
-    messages.success(request, "Book added to favorites!")
     return redirect("book_detail", book_id=book.id)  # ✅ Pass book_id
 
 @login_required
@@ -158,5 +157,4 @@ def remove_favorite(request, book_id):
     """Removes a book from favorites."""
     book = get_object_or_404(Book, id=book_id)
     FavoriteBook.objects.filter(user=request.user, book=book).delete()
-    messages.success(request, "Book removed from favorites!")
     return redirect("book_detail", book_id=book.id)  # ✅ Pass book_id

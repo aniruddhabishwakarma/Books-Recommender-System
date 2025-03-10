@@ -4,23 +4,96 @@
 
 {% block content %}
 <div class="container mt-4">
-    <h1 class="text-center mb-4">📚 Featured</h1>
-    <div class="row">
-        {% for book in books %}
-        <div class="col-md-3 mb-4">
-            <div class="card shadow-sm h-100">
-                <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">
-                    <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
-                    <div class="card-body">
-                        <h5 class="card-title">{{ book.title }}</h5>
-                        <p class="card-text text-muted">{{ book.authors }}</p>
-                    </div>
-                </a>
+
+    {% if top_recommendations %}
+        <h2 class="text-center">📖 Recommended Books for You</h2>
+        <div class="row">
+            {% for book in top_recommendations %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">
+                        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text text-muted">{{ book.authors }}</p>
+                        </div>
+                    </a>
+                </div>
             </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-center">No books available.</p>
-        {% endfor %}
-    </div>
+    {% endif %}
+
+    {% if similar_users_recommendations %}
+        <h2 class="text-center mt-5">📖 Books Liked by Similar Users</h2>
+        <div class="row">
+            {% for item in similar_users_recommendations %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{% url 'book_detail' item.book.id %}" class="text-decoration-none text-dark">
+                        <img src="{{ item.book.thumbnail }}" class="card-img-top" alt="{{ item.book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ item.book.title }}</h5>
+                            <p class="card-text text-muted">{{ item.book.authors }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+
+            {% for similar in item.similar_books %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{% url 'book_detail' similar.id %}" class="text-decoration-none text-dark">
+                        <img src="{{ similar.thumbnail }}" class="card-img-top" alt="{{ similar.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ similar.title }}</h5>
+                            <p class="card-text text-muted">{{ similar.authors }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+            
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if recommended_books %}
+        <h2 class="text-center mt-5">📖 Because You Liked: <strong>{{ favorite_title }}</strong></h2>
+        <div class="row">
+            {% for book in recommended_books %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">
+                        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text text-muted">{{ book.authors }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if not recommended_books and not top_recommendations and not similar_users_recommendations %}
+        <h2 class="text-center">📚 Featured Books</h2>
+        <div class="row">
+            {% for book in books %}
+            <div class="col-md-3 mb-4">
+                <div class="card shadow-sm h-100">
+                    <a href="{% url 'book_detail' book.id %}" class="text-decoration-none text-dark">
+                        <img src="{{ book.thumbnail }}" class="card-img-top" alt="{{ book.title }}">
+                        <div class="card-body">
+                            <h5 class="card-title">{{ book.title }}</h5>
+                            <p class="card-text text-muted">{{ book.authors }}</p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    {% endif %}
 </div>
 {% endblock %}
