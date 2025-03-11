@@ -35,6 +35,8 @@ urlpatterns = [
     path("account/change-password/", change_password, name="change_password"),
     path("account/favorites/add/<str:book_id>/", add_favorite, name="add_favorite"),
     path("account/favorites/remove/<str:book_id>/", remove_favorite, name="remove_favorite"),
+    path('book/<str:book_id>/add-to-read/', add_to_read, name='add_to_read'),
+    path('book/<str:book_id>/remove-to-read/', remove_to_read, name='remove_to_read')
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

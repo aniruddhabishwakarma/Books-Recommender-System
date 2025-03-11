@@ -211,6 +211,32 @@
                                         Login to save favorites
                                     </a>
                                 {% endif %}
+                                <!-- "To Read" Button -->
+{% if user.is_authenticated %}
+{% if is_to_read %}
+    <a href="{% url 'remove_to_read' book.id %}" class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="currentColor" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7v14" />
+        </svg>
+        Remove from To Read
+    </a>
+{% else %}
+    <a href="{% url 'add_to_read' book.id %}" class="flex items-center justify-center px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-400 transition-colors duration-200">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14m-7-7v14" />
+        </svg>
+        Add to To Read
+    </a>
+{% endif %}
+{% else %}
+<a href="{% url 'login' %}" class="flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-colors duration-200">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-gray-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+    </svg>
+    Login to save books to read
+</a>
+{% endif %}
+
                                 
                                 
                             </div>
@@ -221,34 +247,44 @@
         </div>
 
         <!-- Similar Books Section -->
-        <div class="mt-12">
-            <h2 class="text-2xl font-bold text-gray-900 mb-6">You Might Also Like</h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                <!-- This is a placeholder section. You can integrate it with your recommendation system -->
-                {% for i in "12345"|make_list %}
-                <div class="group">
-                    <a href="#" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                            <div class="relative pb-[140%] overflow-hidden bg-indigo-50">
-                                <div class="absolute inset-0 flex items-center justify-center bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    4.{{ forloop.counter }} ★
-                                </div>
-                            </div>
-                            <div class="p-4 flex-grow flex flex-col">
-                                <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">Similar Book Title {{ forloop.counter }}</h3>
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-1">Author Name</p>
-                            </div>
+<div class="mt-12">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6">📖 You Might Also Like</h2>
+    
+    {% if similar_books %}
+    <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        {% for similar_book in similar_books %}
+        <div class="group">
+            <a href="{% url 'book_detail' similar_book.id %}" class="block">
+                <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
+                    <div class="relative pb-[140%] overflow-hidden bg-indigo-50">
+                        <img src="{{ similar_book.thumbnail }}" 
+                             class="absolute inset-0 w-full h-full object-cover"
+                             alt="{{ similar_book.title }}"
+                             onerror="this.onerror=null; this.src='/static/images/book-placeholder.jpg';">
+                        
+                        {% if similar_book.rating %}
+                        <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
+                            ⭐ {{ similar_book.rating }} ★
                         </div>
-                    </a>
+                        {% endif %}
+                    </div>
+                    
+                    <div class="p-4 flex-grow flex flex-col">
+                        <h3 class="font-bold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">
+                            {{ similar_book.title }}
+                        </h3>
+                        <p class="text-gray-600 text-xs mb-2 line-clamp-1">{{ similar_book.authors|default:"Unknown Author" }}</p>
+                    </div>
                 </div>
-                {% endfor %}
-            </div>
+            </a>
         </div>
+        {% endfor %}
+    </div>
+    
+    {% else %}
+    <p class="text-muted">No similar books found.</p>
+    {% endif %}
+</div>
     </div>
 </div>
 

@@ -139,10 +139,12 @@ def my_account(request):
     """Displays My Account page with Profile & Favorite Books tabs."""
     profile, created = UserProfile.objects.get_or_create(user=request.user)
     favorite_books = FavoriteBook.objects.filter(user=request.user)
+    to_read_books = ToReadBook.objects.filter(user=request.user)
 
     return render(request, "my_account.html", {
         "profile": profile,
-        "favorite_books": favorite_books
+        "favorite_books": favorite_books,
+        "to_read_books": to_read_books,
     })
 
 @login_required
@@ -158,3 +160,20 @@ def remove_favorite(request, book_id):
     book = get_object_or_404(Book, id=book_id)
     FavoriteBook.objects.filter(user=request.user, book=book).delete()
     return redirect("book_detail", book_id=book.id)  # ✅ Pass book_id
+
+
+@login_required
+def add_to_read(request, book_id):
+    """Adds a book to the 'To Read' list."""
+    book = get_object_or_404(Book, id=book_id)
+    ToReadBook.objects.get_or_create(user=request.user, book=book)
+    messages.success(request, "Book added to your 'To Read' list!")
+    return redirect("book_detail", book_id=book.id)
+
+@login_required
+def remove_to_read(request, book_id):
+    """Removes a book from the 'To Read' list."""
+    book = get_object_or_404(Book, id=book_id)
+    ToReadBook.objects.filter(user=request.user, book=book).delete()
+    messages.success(request, "Book removed from your 'To Read' list.")
+    return redirect("book_detail", book_id=book.id)

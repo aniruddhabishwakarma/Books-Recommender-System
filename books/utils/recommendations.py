@@ -175,3 +175,44 @@ def get_similar_users_recommendations(user, num_recommendations=5, num_similar=3
     random.shuffle(books_with_similars)
 
     return books_with_similars[:num_recommendations]  # Return limited recommendations
+
+def compute_similarity(all_books):
+    """Computes the similarity matrix using TF-IDF and cosine similarity."""
+    
+    # Extract book descriptions (or other features if needed)
+    descriptions = [book.description if book.description else "" for book in all_books]
+    
+    # Convert descriptions into TF-IDF features
+    vectorizer = TfidfVectorizer(stop_words="english")
+    tfidf_matrix = vectorizer.fit_transform(descriptions)
+    
+    # Compute cosine similarity
+    similarity_matrix = cosine_similarity(tfidf_matrix)
+    
+    return similarity_matrix
+
+
+def recommend_similar_books(book, num_recommendations=5):
+    """ Recommends similar books based on book features. """
+    
+    all_books = list(Book.objects.all())  # Convert QuerySet to list
+    book_ids = np.array([b.id for b in all_books])  # Book IDs as numpy array
+
+    # Compute similarity (assuming a precomputed similarity matrix)
+    similarity_matrix = compute_similarity(all_books)  
+
+    # Find the index of the current book
+    book_index = np.where(book_ids == book.id)[0]  # Ensure book.id is in string format
+
+    if book_index.size == 0:
+        return []  # If book not found, return empty list
+
+    book_index = book_index[0]  # Convert from array to single value
+
+    # Get top similar books, excluding the book itself
+    similar_indices = np.argsort(-similarity_matrix[book_index])[: num_recommendations + 1]
+    
+    # Convert numpy.int64 indices to Python int to avoid errors
+    similar_books = [all_books[int(i)] for i in similar_indices if all_books[int(i)] != book]
+    
+    return similar_books[:num_recommendations]  # Return only the top N books

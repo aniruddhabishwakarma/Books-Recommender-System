@@ -1,8 +1,9 @@
 from django.shortcuts import render,get_object_or_404
 import random
+import numpy as np
 from books.models.books_model import Book
-from books.models.user_model import FavoriteBook
-from books.utils.recommendations import get_recommended_books, get_combined_recommendations, get_similar_users_recommendations
+from books.models.user_model import *
+from books.utils.recommendations import get_recommended_books, get_combined_recommendations, get_similar_users_recommendations,recommend_similar_books
 
 def home(request):
     """Home page with personalized recommendations, including similar users' books."""
@@ -51,14 +52,30 @@ def home(request):
 
 def book_detail(request, book_id):
     """Displays details of a book and checks if it's in the user's favorites."""
-    book = get_object_or_404(Book, id=book_id)
+    
+    # Ensure book_id is treated as a string, since book IDs from Google Books API are strings
+    book = get_object_or_404(Book, id=str(book_id))  # Ensure it's a string
 
-    # Check if the book is favorited by the logged-in user
+    # Get 5 recommended similar books
+    similar_books = recommend_similar_books(book, num_recommendations=5)
+
+    # Check if the book is favorited or in the user's 'To Read' list
+    is_to_read = False
     is_favorited = False
     if request.user.is_authenticated:
         is_favorited = FavoriteBook.objects.filter(user=request.user, book=book).exists()
+        is_to_read = ToReadBook.objects.filter(user=request.user, book=book).exists()
 
-    return render(request, "book_detail.html", {"book": book, "is_favorited": is_favorited})
+    return render(
+        request, 
+        "book_detail.html", 
+        {
+            "book": book,
+            "is_favorited": is_favorited,
+            "is_to_read": is_to_read,
+            "similar_books": similar_books,
+        }
+    )
 
 def search_books(request):
     """Search books by title or author."""

@@ -6,12 +6,6 @@
 <div class="container mt-5">
     <h2 class="text-center">My Account</h2>
 
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-        {% endfor %}
-    {% endif %}
-
     <!-- Tabs -->
     <ul class="nav nav-tabs mb-3" id="accountTabs">
         <li class="nav-item">
@@ -19,6 +13,9 @@
         </li>
         <li class="nav-item">
             <a class="nav-link" id="favorites-tab" data-bs-toggle="tab" href="#favorites">Favorite Books</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="to-read-tab" data-bs-toggle="tab" href="#to-read">To Read</a>
         </li>
     </ul>
 
@@ -44,6 +41,7 @@
 
         <!-- Favorite Books Section -->
         <div class="tab-pane fade" id="favorites">
+            <h4 class="text-center mb-3">❤️ Favorite Books</h4>
             <div class="row">
                 {% for fav in favorite_books %}
                 <div class="col-md-4 mb-4">
@@ -59,6 +57,28 @@
                 </div>
                 {% empty %}
                 <p class="text-center">No favorite books yet.</p>
+                {% endfor %}
+            </div>
+        </div>
+
+        <!-- To Read Books Section -->
+        <div class="tab-pane fade" id="to-read">
+            <h4 class="text-center mb-3">📖 To Read List</h4>
+            <div class="row">
+                {% for to_read in to_read_books %}
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <a href="{% url 'book_detail' to_read.book.id %}" class="text-decoration-none text-dark">
+                            <img src="{{ to_read.book.thumbnail }}" class="card-img-top" alt="{{ to_read.book.title }}">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ to_read.book.title }}</h5>
+                                <p class="card-text text-muted">{{ to_read.book.authors }}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-center">No books in "To Read" list.</p>
                 {% endfor %}
             </div>
         </div>
