@@ -7,7 +7,7 @@
 
     {% if top_recommendations %}
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
+            <h2 class="text-2xl font-bold mb-6 text-indigo-800">
                 <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Recommended Books for You</span>
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -39,7 +39,7 @@
                                 </div>
                             </div>
                             <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
+                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
                                 <p class="text-gray-600 text-xs mb-2 line-clamp-1">
                                     {% if book.authors %}
                                     {{ book.authors }}
@@ -74,7 +74,7 @@
 
     {% if similar_users_recommendations %}
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
+            <h2 class="text-2xl font-bold mb-6 text-indigo-800">
                 <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Books Liked by Similar Users</span>
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -105,7 +105,7 @@
                                 </div>
                             </div>
                             <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ item.book.title }}</h3>
+                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors duration-200">{{ item.book.title }}</h3>
                                 <p class="text-gray-600 text-xs mb-2 line-clamp-1">
                                     {% if item.book.authors %}
                                     {{ item.book.authors }}
@@ -128,7 +128,7 @@
 
     {% if recommended_books %}
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
+            <h2 class="text-2xl font-bold mb-6 text-indigo-800">
                 <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Because You Liked: <span class="text-indigo-600">{{ favorite_title }}</span></span>
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
@@ -156,7 +156,7 @@
                                 </div>
                             </div>
                             <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
+                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
                                 <p class="text-gray-600 text-xs mb-2 line-clamp-1">
                                     {% if book.authors %}
                                     {{ book.authors }}
@@ -179,8 +179,8 @@
 
     {% if not recommended_books and not top_recommendations and not similar_users_recommendations %}
         <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
-                <span class="inline-block transform hover:scale-105 transition-transform duration-200">📚 Featured Books</span>
+            <h2 class="text-2xl font-bold mb-6 text-indigo-800">
+                <span class="inline-block transform hover:scale-105 transition-transform duration-200">Featured Books</span>
             </h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                 {% for book in books %}
@@ -210,7 +210,7 @@
                                 </div>
                             </div>
                             <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
+                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-1 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
                                 <p class="text-gray-600 text-xs mb-2 line-clamp-1">
                                     {% if book.authors %}
                                     {{ book.authors }}
