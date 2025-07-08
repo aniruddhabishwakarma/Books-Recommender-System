@@ -3,85 +3,182 @@
 {% block title %}My Account{% endblock %}
 
 {% block content %}
-<div class="container mt-5">
-    <h2 class="text-center">My Account</h2>
-
+<div class="pt-[5rem]">
     <!-- Tabs -->
-    <ul class="nav nav-tabs mb-3" id="accountTabs">
-        <li class="nav-item">
-            <a class="nav-link active" id="profile-tab" data-bs-toggle="tab" href="#profile">Profile</a>
+    <ul class="nav nav-tabs justify-content-left" ">
+        <li class=" nav-item">
+        <a class="nav-link active fw-medium" id="profile-tab" data-bs-toggle="tab" href="#profile">
+            <i class="bi bi-person me-2"></i>Profile
+        </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="favorites-tab" data-bs-toggle="tab" href="#favorites">Favorite Books</a>
+            <a class="nav-link fw-medium" id="favorites-tab" data-bs-toggle="tab" href="#favorites">
+                <i class="bi bi-heart-fill me-2"></i>Favorites
+            </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="to-read-tab" data-bs-toggle="tab" href="#to-read">To Read</a>
+            <a class="nav-link fw-medium" id="to-read-tab" data-bs-toggle="tab" href="#to-read">
+                <i class="bi bi-bookmark-check me-2"></i>To Read
+            </a>
         </li>
     </ul>
 
-    <div class="tab-content">
+    <div class="tab-content p-3">
         <!-- Profile Section -->
         <div class="tab-pane fade show active" id="profile">
-            <div class="card mx-auto shadow-sm p-4" style="max-width: 500px;">
-                <div class="text-center">
-                    <img src="{{ profile.profile_picture.url }}" class="rounded-circle" width="120" height="120" alt="Profile">
+            <div class="card mx-auto border-0 shadow-sm p-4" style="max-width: 600px;">
+                <div class="text-center mb-4">
+                    <div class="position-relative d-inline-block">
+                        <img src="{{ profile.profile_picture.url }}" class="rounded-circle shadow" width="140"
+                            height="140" alt="Profile">
+                        <span
+                            class="position-absolute bottom-0 end-0 bg-primary rounded-circle p-2 border border-3 border-white">
+                            <i class="bi bi-pencil-fill text-white"></i>
+                        </span>
+                    </div>
                 </div>
-                <div class="mt-3">
-                    <p><strong>Full Name:</strong> {{ profile.full_name }}</p>
-                    <p><strong>Username:</strong> {{ profile.user.username }}</p>
-                    <p><strong>Email:</strong> {{ profile.user.email }}</p>
-                    <p><strong>Contact:</strong> {{ profile.contact }}</p>
+
+                <div class="profile-details">
+                    <div class="mb-3">
+                        <label class="text-muted small mb-1">Full Name</label>
+                        <p class="fs-5">{{ profile.full_name }}</p>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small mb-1">Username</label>
+                            <p class="fs-5">{{ profile.user.username }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small mb-1">Email</label>
+                            <p class="fs-5">{{ profile.user.email }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="text-muted small mb-1">Contact</label>
+                        <p class="fs-5">{{ profile.contact }}</p>
+                    </div>
                 </div>
-                <div class="text-center">
-                    <a href="{% url 'edit_profile' %}" class="btn btn-primary">Edit Profile</a>
-                    <a href="{% url 'change_password' %}" class="btn btn-warning">Change Password</a>
+
+                <div class="text-center mt-4">
+                    <a href="{% url 'edit_profile' %}" class="btn btn-outline-primary me-2 px-4">
+                        <i class="bi bi-pencil-square me-2"></i>Edit Profile
+                    </a>
+                    <a href="{% url 'change_password' %}" class="btn btn-outline-secondary px-4">
+                        <i class="bi bi-shield-lock me-2"></i>Change Password
+                    </a>
                 </div>
             </div>
         </div>
 
         <!-- Favorite Books Section -->
         <div class="tab-pane fade" id="favorites">
-            <h4 class="text-center mb-3">❤️ Favorite Books</h4>
-            <div class="row">
+            <div class="text-center mb-5">
+                <h4 class="fw-normal text-dark">
+                    <i class="bi bi-heart-fill text-danger me-2"></i>Favorite Books
+                </h4>
+                <div class="border-top mx-auto" style="width: 60px;"></div>
+            </div>
+
+            <div class="row g-4">
                 {% for fav in favorite_books %}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm h-100">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
                         <a href="{% url 'book_detail' fav.book.id %}" class="text-decoration-none text-dark">
-                            <img src="{{ fav.book.thumbnail }}" class="card-img-top" alt="{{ fav.book.title }}">
+                            <div class="card-img-top overflow-hidden" style="height: 200px;">
+                                <img src="{{ fav.book.thumbnail }}" class="img-fluid h-100 w-100 object-fit-cover"
+                                    alt="{{ fav.book.title }}">
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">{{ fav.book.title }}</h5>
-                                <p class="card-text text-muted">{{ fav.book.authors }}</p>
+                                <h5 class="card-title text-truncate">{{ fav.book.title }}</h5>
+                                <p class="card-text text-muted small">{{ fav.book.authors }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <span class="badge bg-light text-dark small">
+                                    <i class="bi bi-star-fill text-warning me-1"></i>Favorite
+                                </span>
                             </div>
                         </a>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center">No favorite books yet.</p>
+                <div class="col-12 text-center py-5">
+                    <div class="display-4 text-muted mb-3">
+                        <i class="bi bi-book"></i>
+                    </div>
+                    <h5 class="text-muted">No favorite books yet</h5>
+                    <p class="text-muted small">Start adding books to your favorites to see them here</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
 
         <!-- To Read Books Section -->
         <div class="tab-pane fade" id="to-read">
-            <h4 class="text-center mb-3">📖 To Read List</h4>
-            <div class="row">
+            <div class="text-center mb-5">
+                <h4 class="fw-normal text-dark">
+                    <i class="bi bi-bookmark-check text-primary me-2"></i>To Read List
+                </h4>
+                <div class="border-top mx-auto" style="width: 60px;"></div>
+            </div>
+
+            <div class="row g-4">
                 {% for to_read in to_read_books %}
-                <div class="col-md-4 mb-4">
-                    <div class="card shadow-sm h-100">
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
                         <a href="{% url 'book_detail' to_read.book.id %}" class="text-decoration-none text-dark">
-                            <img src="{{ to_read.book.thumbnail }}" class="card-img-top" alt="{{ to_read.book.title }}">
+                            <div class="card-img-top overflow-hidden" style="height: 200px;">
+                                <img src="{{ to_read.book.thumbnail }}" class="img-fluid h-100 w-100 object-fit-cover"
+                                    alt="{{ to_read.book.title }}">
+                            </div>
                             <div class="card-body">
-                                <h5 class="card-title">{{ to_read.book.title }}</h5>
-                                <p class="card-text text-muted">{{ to_read.book.authors }}</p>
+                                <h5 class="card-title text-truncate">{{ to_read.book.title }}</h5>
+                                <p class="card-text text-muted small">{{ to_read.book.authors }}</p>
+                            </div>
+                            <div class="card-footer bg-transparent border-top-0">
+                                <span class="badge bg-light text-dark small">
+                                    <i class="bi bi-bookmark-check text-primary me-1"></i>To Read
+                                </span>
                             </div>
                         </a>
                     </div>
                 </div>
                 {% empty %}
-                <p class="text-center">No books in "To Read" list.</p>
+                <div class="col-12 text-center py-5">
+                    <div class="display-4 text-muted mb-3">
+                        <i class="bi bi-journal-plus"></i>
+                    </div>
+                    <h5 class="text-muted">Your reading list is empty</h5>
+                    <p class="text-muted small">Add books to your reading list to keep track of what you want to read
+                        next</p>
+                </div>
                 {% endfor %}
             </div>
         </div>
     </div>
 </div>
+
+<style>
+    .hover-shadow:hover {
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
+    }
+
+    .transition-all {
+        transition: all 0.3s ease;
+    }
+
+    .object-fit-cover {
+        object-fit: cover;
+    }
+
+    .nav-tabs .nav-link {
+        color: #495057;
+    }
+
+    .nav-tabs .nav-link.active {
+        color: #0d6efd;
+        border-bottom: 2px solid #0d6efd;
+    }
+</style>
 {% endblock %}

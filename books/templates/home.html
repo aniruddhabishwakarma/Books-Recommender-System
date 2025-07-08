@@ -3,232 +3,57 @@
 {% block title %}Home - Book Recommender{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<div class="mx-3 pt-[5.5rem]">
 
+    <!-- Trending Books -->
     {% if top_recommendations %}
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
-                <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Recommended Books for You</span>
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {% for book in top_recommendations %}
-                <div class="group">
-                    <a href="{% url 'book_detail' book.id %}" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                            <div class="relative pb-[120%] overflow-hidden bg-indigo-50">
-                                {% if book.thumbnail %}
-                                <img 
-                                    src="{{ book.thumbnail }}" 
-                                    class="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-300"
-                                    alt="{{ book.title }}"
-                                    onerror="this.onerror=null; this.src='/static/images/book-placeholder.jpg';"
-                                >
-                                {% else %}
-                                <div class="absolute inset-0 flex items-center justify-center bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                {% endif %}
-                                <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    {% if book.rating %}
-                                    {{ book.rating }} ★
-                                    {% else %}
-                                    4.5 ★
-                                    {% endif %}
-                                </div>
-                            </div>
-                            <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-1">
-                                    {% if book.authors %}
-                                    {{ book.authors }}
-                                    {% else %}
-                                    Unknown Author
-                                    {% endif %}
-                                </p>
-                                <div class="mt-auto pt-2 flex justify-between items-center border-t border-gray-100">
-                                    <span class="text-xs text-gray-500">
-                                        {% if book.published_year %}
-                                        {{ book.published_year }}
-                                        {% else %}
-                                        2023
-                                        {% endif %}
-                                    </span>
-                                    <span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">
-                                        {% if book.category %}
-                                        {{ book.category }}
-                                        {% else %}
-                                        Fiction
-                                        {% endif %}
-                                    </span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Trending Books</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+            {% for book in top_recommendations %}
+            {% include 'bookcard.html' %}
+            {% endfor %}
         </div>
+    </div>
     {% endif %}
 
+    <!-- Similar Users Books -->
     {% if similar_users_recommendations %}
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
-                <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Books Liked by Similar Users</span>
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {% for item in similar_users_recommendations %}
-                <div class="group">
-                    <a href="{% url 'book_detail' item.book.id %}" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                            <div class="relative pb-[120%] overflow-hidden bg-indigo-50">
-                                {% if item.book.thumbnail %}
-                                <img 
-                                    src="{{ item.book.thumbnail }}" 
-                                    class="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-300"
-                                    alt="{{ item.book.title }}"
-                                    onerror="this.onerror=null; this.src='/static/images/book-placeholder.jpg';"
-                                >
-                                {% else %}
-                                <div class="absolute inset-0 flex items-center justify-center bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                {% endif %}
-                                <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    4.7 ★
-                                </div>
-                                <div class="absolute top-2 left-2 bg-indigo-600 text-white rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    Similar
-                                </div>
-                            </div>
-                            <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ item.book.title }}</h3>
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-1">
-                                    {% if item.book.authors %}
-                                    {{ item.book.authors }}
-                                    {% else %}
-                                    Unknown Author
-                                    {% endif %}
-                                </p>
-                                <div class="mt-auto pt-2 flex justify-between items-center border-t border-gray-100">
-                                    <span class="text-xs text-gray-500">2023</span>
-                                    <span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">Fiction</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Books Liked by Similar Users</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+            {% for item in similar_users_recommendations %}
+            {% include 'bookcard.html' %}
+            {% endfor %}
         </div>
+    </div>
     {% endif %}
 
+    <!-- Personalized Recommendations -->
     {% if recommended_books %}
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
-                <span class="inline-block transform hover:scale-105 transition-transform duration-200">📖 Because You Liked: <span class="text-indigo-600">{{ favorite_title }}</span></span>
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {% for book in recommended_books %}
-                <div class="group">
-                    <a href="{% url 'book_detail' book.id %}" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                            <div class="relative pb-[120%] overflow-hidden bg-indigo-50">
-                                {% if book.thumbnail %}
-                                <img 
-                                    src="{{ book.thumbnail }}" 
-                                    class="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-300"
-                                    alt="{{ book.title }}"
-                                    onerror="this.onerror=null; this.src='/static/images/book-placeholder.jpg';"
-                                >
-                                {% else %}
-                                <div class="absolute inset-0 flex items-center justify-center bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                {% endif %}
-                                <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    4.6 ★
-                                </div>
-                            </div>
-                            <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-1">
-                                    {% if book.authors %}
-                                    {{ book.authors }}
-                                    {% else %}
-                                    Unknown Author
-                                    {% endif %}
-                                </p>
-                                <div class="mt-auto pt-2 flex justify-between items-center border-t border-gray-100">
-                                    <span class="text-xs text-gray-500">2021</span>
-                                    <span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">Fiction</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">
+            Because You Liked: <span class="text-indigo-600">{{ favorite_title }}</span>
+        </h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+            {% for book in recommended_books %}
+            {% include 'bookcard.html' %}
+            {% endfor %}
         </div>
+    </div>
     {% endif %}
 
+    <!-- Default Featured -->
     {% if not recommended_books and not top_recommendations and not similar_users_recommendations %}
-        <div class="mb-12">
-            <h2 class="text-2xl font-bold text-center mb-6 text-indigo-800">
-                <span class="inline-block transform hover:scale-105 transition-transform duration-200">📚 Featured Books</span>
-            </h2>
-            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {% for book in books %}
-                <div class="group">
-                    <a href="{% url 'book_detail' book.id %}" class="block">
-                        <div class="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-shadow duration-300 h-full flex flex-col">
-                            <div class="relative pb-[120%] overflow-hidden bg-indigo-50">
-                                {% if book.thumbnail %}
-                                <img 
-                                    src="{{ book.thumbnail }}" 
-                                    class="absolute inset-0 w-full h-full object-cover object-center transform group-hover:scale-105 transition-transform duration-300"
-                                    alt="{{ book.title }}"
-                                    onerror="this.onerror=null; this.src='/static/images/book-placeholder.jpg';"
-                                >
-                                {% else %}
-                                <div class="absolute inset-0 flex items-center justify-center bg-indigo-100">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-indigo-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
-                                    </svg>
-                                </div>
-                                {% endif %}
-                                <div class="absolute top-2 right-2 bg-yellow-400 text-yellow-800 rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    4.8 ★
-                                </div>
-                                <div class="absolute top-2 left-2 bg-indigo-600 text-white rounded-full px-2 py-1 text-xs font-bold shadow-sm">
-                                    Featured
-                                </div>
-                            </div>
-                            <div class="p-3 flex-grow flex flex-col">
-                                <h3 class="font-semibold text-gray-800 text-sm mb-1 line-clamp-2 group-hover:text-indigo-600 transition-colors duration-200">{{ book.title }}</h3>
-                                <p class="text-gray-600 text-xs mb-2 line-clamp-1">
-                                    {% if book.authors %}
-                                    {{ book.authors }}
-                                    {% else %}
-                                    Unknown Author
-                                    {% endif %}
-                                </p>
-                                <div class="mt-auto pt-2 flex justify-between items-center border-t border-gray-100">
-                                    <span class="text-xs text-gray-500">2023</span>
-                                    <span class="bg-indigo-50 text-indigo-700 text-xs px-2 py-1 rounded">Bestseller</span>
-                                </div>
-                            </div>
-                        </div>
-                    </a>
-                </div>
-                {% endfor %}
-            </div>
+    <div class="mb-10">
+        <h2 class="text-lg font-semibold text-gray-800 mb-4">Featured Books</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 xl:grid-cols-5 gap-4 justify-items-center">
+            {% for book in books %}
+            {% include 'bookcard.html' %}
+            {% endfor %}
         </div>
+    </div>
     {% endif %}
+
 </div>
 {% endblock %}
