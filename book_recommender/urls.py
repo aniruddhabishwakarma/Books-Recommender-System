@@ -20,10 +20,11 @@ from books.views.books_view import home,book_detail,search_books
 from books.views.user_view import *
 from django.conf import settings
 from django.conf.urls.static import static
+from books.views.admin_view import *
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('superadmin/', admin.site.urls),
     path("", home, name="home"),
     path("book/<str:book_id>/", book_detail, name="book_detail"),
     path("search/", search_books, name="search_books"),
@@ -36,7 +37,21 @@ urlpatterns = [
     path("account/favorites/add/<str:book_id>/", add_favorite, name="add_favorite"),
     path("account/favorites/remove/<str:book_id>/", remove_favorite, name="remove_favorite"),
     path('book/<str:book_id>/add-to-read/', add_to_read, name='add_to_read'),
-    path('book/<str:book_id>/remove-to-read/', remove_to_read, name='remove_to_read')
+    path('book/<str:book_id>/remove-to-read/', remove_to_read, name='remove_to_read'),
+
+    path('admin/login/', admin_login, name='panel_login'),
+    path('admin/logout/', admin_logout, name='panel_logout'),
+    path('admin/register/', admin_register, name='panel_register'),
+    path('admin/dashboard/', panel_dashboard, name='panel_dashboard'),
+    path("admin/books/", admin_books, name="panel_books"),
+    path("dashboard/users/", admin_users_view, name="panel_users"),
+    path("admin/books/add/", admin_book_add, name="panel_book_add"),
+    path("admin/books/<str:book_id>/", admin_book_detail, name="panel_book_detail"),
+    path("admin/profile/", admin_profile, name="panel_admin_profile"),
+    path("admin/book/search/", book_search, name="panel_book_search"),
+    path("admin/interactions/", admin_interactions_view, name="panel_interactions"),
+
+
 ]
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

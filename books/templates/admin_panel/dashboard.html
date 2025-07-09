@@ -1,0 +1,93 @@
+{% extends "admin_panel/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="p-6 space-y-10">
+
+  <!-- Summary Cards -->
+  <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+    <!-- Total Books -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-gray-600 text-sm mb-1">Total Books</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">{{ total_books }}</h2>
+      <a href="{% url 'panel_books' %}" class="text-sm px-4 py-2 border border-gray-800 rounded-full text-gray-800 hover:bg-gray-800 hover:text-white transition">View Details</a>
+    </div>
+
+    <!-- Total Users -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-gray-600 text-sm mb-1">Total Users</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">{{ total_users }}</h2>
+      <a href="{% url 'panel_users' %}" class="text-sm px-4 py-2 border border-gray-800 rounded-full text-gray-800 hover:bg-gray-800 hover:text-white transition">View Details</a>
+    </div>
+
+    <!-- Total Interactions -->
+    <div class="bg-white p-4 rounded-xl shadow-sm border border-gray-200">
+      <p class="text-gray-600 text-sm mb-1">Total Interactions</p>
+      <h2 class="text-3xl font-bold text-gray-900 mb-3">{{ total_interactions }}</h2>
+      <a href="{% url 'panel_interactions' %}"
+    class="inline-block text-sm font-medium px-4 py-2 border border-gray-800 rounded-full
+            text-gray-800 hover:bg-gray-800 hover:text-white transition">
+    View Details
+  </a>
+    </div>
+  </div>
+
+  <!-- Recent Activity Section -->
+  <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+    <!-- Recently Added Books -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">Recently Added Books</h2>
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-100 text-gray-600 font-medium">
+            <tr>
+              <th class="px-4 py-2 text-left">Title</th>
+              <th class="px-4 py-2 text-left">Category</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for book in recent_added %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2">{{ book.title|truncatechars:50 }}</td>
+              <td class="px-4 py-2">{{ book.categories|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2" class="px-4 py-4 text-center text-gray-500">No recent books.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Recently Updated Books -->
+    <div>
+      <h2 class="text-lg font-semibold text-gray-800 mb-3">Recently Updated Books</h2>
+      <div class="bg-white rounded-xl border border-gray-200 overflow-hidden">
+        <table class="min-w-full text-sm">
+          <thead class="bg-gray-100 text-gray-600 font-medium">
+            <tr>
+              <th class="px-4 py-2 text-left">Title</th>
+              <th class="px-4 py-2 text-left">Publisher</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-100">
+            {% for book in recent_updated %}
+            <tr class="hover:bg-gray-50">
+              <td class="px-4 py-2">{{ book.title|truncatechars:50 }}</td>
+              <td class="px-4 py-2">{{ book.publisher|default:"—" }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="2" class="px-4 py-4 text-center text-gray-500">No updates found.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+</div>
+{% endblock %}

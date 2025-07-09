@@ -1,0 +1,53 @@
+<header class="fixed top-0 left-0 right-0 bg-white shadow z-50 h-16 flex items-center justify-between px-6">
+  <!-- Logo -->
+  <h1 class="text-lg font-bold hidden sm:block">Book Recommender</h1>
+
+  <!-- ─────────── Center search bar (now a form) ─────────── -->
+  <form action="{% url 'panel_book_search' %}"        
+        method="get"
+        class="flex-1 px-4 max-w-xl mx-auto">
+    <div class="relative">
+      <input type="text" name="q"                     
+             placeholder="Search books…"
+             value="{{ request.GET.q|default_if_none:'' }}"
+             class="w-full pl-10 pr-4 py-2 rounded-full border border-gray-300 focus:ring-2 focus:ring-gray-700" />
+      <!-- Search icon acts as submit button -->
+      <button type="submit" class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-600">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                d="M21 21l-4.35-4.35m0 0A7.5 7.5 0 103.5 10.5a7.5 7.5 0 0013.65 6.15z"/>
+        </svg>
+      </button>
+    </div>
+  </form>
+
+  <!-- Right-hand icons + avatar dropdown (unchanged) -->
+  <div class="flex items-center gap-5 relative">
+    <!-- Notification bell -->
+    <svg class="w-6 h-6 text-gray-700 cursor-pointer" fill="none" stroke="currentColor" stroke-width="2"
+         viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round"
+            d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6 6 0 10-12 0v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+    </svg>
+
+    <!-- Avatar / dropdown toggle -->
+    <img id="avatarBtn"
+         src="{{ request.user.admin_profile.profile_picture.url|default:'/static/default.jpg' }}"
+         alt="avatar"
+         class="w-9 h-9 rounded-full object-cover border cursor-pointer" />
+
+    <!-- Dropdown -->
+    <div id="avatarMenu"
+         class="absolute right-0 top-12 w-44 bg-white border border-gray-200 rounded-xl shadow-lg py-2 hidden">
+      <a href="{% url 'panel_admin_profile' %}"
+         class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Profile</a>
+      <form action="{% url 'panel_logout' %}" method="post" class="px-4">
+        {% csrf_token %}
+        <button type="submit"
+                class="w-full text-left py-2 text-sm text-red-600 hover:bg-gray-100 rounded-lg">
+          Logout
+        </button>
+      </form>
+    </div>
+  </div>
+</header>

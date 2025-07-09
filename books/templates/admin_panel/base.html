@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>{% block title %}Admin Panel{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="bg-gray-100">
+
+  <!-- Navbar (fixed top) -->
+  {% include "admin_panel/_navbar.html" %}
+
+  <!-- Sidebar (fixed left below navbar) -->
+  {% include "admin_panel/_sidebar.html" %}
+
+  <!-- Page content (pushed by sidebar + navbar) -->
+  <main class="pt-[64px] md:pl-64 p-6">
+    {% block content %}{% endblock %}
+  </main>
+<script>
+  (function () {
+    const btn   = document.getElementById('avatarBtn');
+    const menu  = document.getElementById('avatarMenu');
+      const input = document.getElementById('profileInput');
+  const preview = document.getElementById('preview');
+
+    // toggle on click
+    btn.addEventListener('click', () => {
+      menu.classList.toggle('hidden');
+    });
+
+    // click-outside to close
+    document.addEventListener('click', (e) => {
+      if (!menu.contains(e.target) && !btn.contains(e.target)) {
+        menu.classList.add('hidden');
+      }
+    });
+    input.addEventListener('change', (e) => {
+    const file = e.target.files[0];
+    if (file) preview.src = URL.createObjectURL(file);
+  });
+  })();
+</script>
+</body>
+</html>

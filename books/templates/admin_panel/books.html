@@ -1,0 +1,92 @@
+{% extends "admin_panel/base.html" %}
+
+{% block title %}All Books · Admin{% endblock %}
+
+
+{% block extra_head %}
+<style>
+/* Only touches scrollbars inside the table wrapper */
+.scroll-wrapper::-webkit-scrollbar {
+  width: 10px;               /* wider bar */
+}
+.scroll-wrapper::-webkit-scrollbar-track {
+  background: #f3f4f6;       /* Tailwind gray-100 */
+  border-radius: 8px;
+}
+.scroll-wrapper::-webkit-scrollbar-thumb {
+  background: #9ca3af;       /* Tailwind gray-400 */
+  border-radius: 8px;
+}
+.scroll-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #6b7280;       /* Tailwind gray-500 */
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="p-6">
+
+    <div class="flex items-center justify-end mb-4">
+    <!-- Add Book button aligned right with opposite color -->
+    <a href="{% url 'panel_book_add' %}"  
+      class="bg-white text-black  px-4 py-2 rounded-lg hover:bg-black hover:text-white transition">
+      + Add Book
+    </a>
+  </div>
+  <!-- Scrollable table wrapper -->
+  <div class="scroll-wrapper rounded-xl border border-gray-200 overflow-auto max-h-[500px]">
+    <table class="min-w-full text-sm text-left table-auto">
+      <thead class="bg-gray-100 sticky top-0 z-10">
+        <tr class="text-gray-700 font-medium">
+          <th class="px-4 py-3">#</th>
+          <th class="px-4 py-3">Title</th>
+          <th class="px-4 py-3">Authors</th>
+          <th class="px-4 py-3">Category</th>
+          <th class="px-4 py-3">Published</th>
+          <th class="px-4 py-3 text-right">Price</th>
+          <th class="px-4 py-3 text-right">Action</th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-gray-100">
+  {% for book in page_obj %}
+  <tr class="hover:bg-gray-50">
+    <td class="px-4 py-2 text-gray-500">{{ forloop.counter0|add:page_obj.start_index }}</td>
+    <td class="px-4 py-2 font-medium text-gray-800">{{ book.title|truncatechars:60 }}</td>
+    <td class="px-4 py-2 text-gray-600">{{ book.authors|default:"—" }}</td>
+    <td class="px-4 py-2 text-gray-600">{{ book.categories|default:"—" }}</td>
+    <td class="px-4 py-2 text-gray-600">{{ book.published_date|default:"—" }}</td>
+    <td class="px-4 py-2 text-right text-gray-600">
+      {% if book.price %}{{ book.price }} {{ book.currency|default:"" }}{% else %}—{% endif %}
+    </td>
+    <!-- ➕ Add this cell with edit button -->
+    <td class="px-4 py-2 text-right">
+      <a href="{% url 'panel_book_detail' book.id %}"
+         class="text-sm px-3 py-1 border rounded hover:bg-gray-100">
+        View
+      </a>
+    </td>
+  </tr>
+  {% endfor %}
+</tbody>
+
+    </table>
+  </div>
+
+  <!-- Pagination -->
+  <div class="flex justify-between items-center mt-6 text-sm text-gray-600">
+    <div>
+      Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}
+    </div>
+    <div class="flex gap-2">
+      {% if page_obj.has_previous %}
+      <a href="?page={{ page_obj.previous_page_number }}"
+         class="px-3 py-1 border rounded-lg hover:bg-gray-100">Prev</a>
+      {% endif %}
+      {% if page_obj.has_next %}
+      <a href="?page={{ page_obj.next_page_number }}"
+         class="px-3 py-1 border rounded-lg hover:bg-gray-100">Next</a>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
